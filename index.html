@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modern Homepage Design1 for Structured™</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{
+  --bg:#050608;
+  --bg-alt:#0a0c11;
+  --surface:#0f121a;
+  --surface-2:#141822;
+  --border:rgba(255,255,255,0.09);
+  --border-soft:rgba(255,255,255,0.05);
+  --text:#f4f5f8;
+  --text-dim:#9aa1b0;
+  --text-dimmer:#666d7d;
+  --accent1:#8b7bff;
+  --accent2:#4f8cff;
+  --gradient:linear-gradient(135deg,#9b8bff 0%,#5a92ff 100%);
+  --radius:14px;
+  --maxw:1280px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter',sans-serif;
+  overflow-x:hidden;
+  line-height:1.5;
+}
+h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:-0.02em;}
+a{color:inherit;text-decoration:none;}
+img{max-width:100%;display:block;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 32px;}
+.text-grad{background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent;}
+
+/* background texture */
+.bg-grid{
+  position:fixed;inset:0;z-index:-2;
+  background-image:radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+  background-size:38px 38px;
+  mask-image:radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%);
+}
+.bg-glow{
+  position:fixed;top:-200px;right:-200px;width:800px;height:800px;z-index:-1;
+  background:radial-gradient(circle, rgba(139,123,255,0.15), transparent 70%);
+  pointer-events:none;
+}
+
+/* ============ HEADER ============ */
+header{
+  position:sticky;top:0;z-index:1000;
+  background:rgba(5,6,8,0.75);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border-soft);
+}
+.header-inner{
+  max-width:var(--maxw);margin:0 auto;padding:18px 32px;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo img{height:26px;width:auto;}
+.logo-fallback{font-family:'Space Grotesk';font-weight:700;letter-spacing:0.28em;font-size:18px;}
+
+nav.main-nav{display:flex;align-items:center;gap:4px;}
+.nav-list{display:flex;list-style:none;align-items:center;gap:2px;}
+.nav-list > li{position:relative;}
+.nav-link{
+  background:none;border:none;color:var(--text-dim);font-size:14.5px;font-family:'Inter';
+  display:flex;align-items:center;gap:6px;padding:10px 14px;border-radius:8px;cursor:pointer;
+  transition:color .2s, background .2s;
+}
+.nav-link:hover{color:var(--text);background:rgba(255,255,255,0.04);}
+.nav-link i{font-size:10px;transition:transform .2s;}
+.has-dropdown.open .nav-link i{transform:rotate(180deg);}
+.has-dropdown.open .nav-link{color:var(--text);background:rgba(255,255,255,0.04);}
+
+.dropdown{
+  position:absolute;top:calc(100% + 6px);left:0;min-width:230px;
+  background:var(--surface-2);border:1px solid var(--border);border-radius:12px;
+  padding:8px;opacity:0;pointer-events:none;transform:translateY(8px);
+  transition:opacity .2s ease, transform .2s ease;
+  box-shadow:0 20px 40px rgba(0,0,0,0.5);
+}
+.has-dropdown.open .dropdown{opacity:1;pointer-events:auto;transform:translateY(0);}
+.dropdown a{
+  display:block;padding:9px 12px;border-radius:8px;font-size:14px;color:var(--text-dim);
+  transition:background .15s, color .15s;
+}
+.dropdown a:hover{background:rgba(255,255,255,0.06);color:var(--text);}
+
+.header-actions{display:flex;align-items:center;gap:10px;}
+.btn{
+  font-family:'Inter';font-size:14px;font-weight:600;border-radius:8px;border:1px solid transparent;
+  padding:10px 18px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .2s;
+  white-space:nowrap;
+}
+.btn-primary{background:var(--gradient);color:#fff;box-shadow:0 4px 20px rgba(120,110,255,0.35);}
+.btn-primary:hover{filter:brightness(1.12);transform:translateY(-1px);}
+.btn-ghost{background:transparent;color:var(--text);border-color:var(--border);}
+.btn-ghost:hover{background:rgba(255,255,255,0.06);}
+.btn-text{background:transparent;color:var(--text-dim);padding:10px 12px;}
+.btn-text:hover{color:var(--text);}
+
+.burger{display:none;background:none;border:none;color:var(--text);font-size:22px;cursor:pointer;}
+
+/* mobile nav panel */
+@media(max-width:960px){
+  .desktop-only{display:none !important;}
+  .burger{display:block;}
+  nav.main-nav{
+    position:fixed;top:0;right:0;height:100vh;width:min(340px,86vw);
+    background:var(--bg-alt);border-left:1px solid var(--border);
+    transform:translateX(100%);transition:transform .35s ease;
+    padding:90px 20px 30px;overflow-y:auto;z-index:999;
+  }
+  nav.main-nav.open{transform:translateX(0);}
+  .nav-list{flex-direction:column;align-items:stretch;width:100%;gap:2px;}
+  .nav-link{width:100%;justify-content:space-between;font-size:16px;padding:14px 10px;}
+  .dropdown{
+    position:static;opacity:1;pointer-events:auto;transform:none;
+    max-height:0;overflow:hidden;transition:max-height .3s ease;padding:0 10px;
+    border:none;background:transparent;box-shadow:none;
+  }
+  .has-dropdown.open .dropdown{max-height:400px;padding:4px 10px 10px;}
+  .mobile-actions{display:flex;flex-direction:column;gap:10px;margin-top:20px;padding-top:20px;border-top:1px solid var(--border);}
+  .mobile-actions .btn{width:100%;justify-content:center;}
+}
+.nav-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:998;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.nav-overlay.open{opacity:1;pointer-events:auto;}
+
+/* ============ HERO ============ */
+.hero{padding:90px 0 60px;position:relative;}
+.hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center;}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--accent1);
+  letter-spacing:0.08em;text-transform:uppercase;font-weight:600;margin-bottom:20px;
+}
+.hero h1{font-size:clamp(38px,5.2vw,64px);line-height:1.05;letter-spacing:-0.03em;margin-bottom:22px;}
+.hero p.sub{color:var(--text-dim);font-size:17px;max-width:480px;margin-bottom:34px;}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:44px;}
+.hero-points{display:flex;gap:32px;flex-wrap:wrap;}
+.hero-point{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--text-dim);}
+.hero-point .ico{
+  width:34px;height:34px;border:1px solid var(--border);border-radius:9px;
+  display:flex;align-items:center;justify-content:center;color:var(--accent1);flex-shrink:0;
+  background:rgba(139,123,255,0.06);
+}
+
+.hero-visual{position:relative;height:480px;display:flex;align-items:center;justify-content:center;}
+.cube-scene{position:relative;width:100%;height:100%;perspective:1400px;}
+.cube{
+  position:absolute;transform-style:preserve-3d;
+  animation:floatCube 6s ease-in-out infinite;
+}
+.cube .face{position:absolute;inset:0;border:1px solid rgba(255,255,255,0.18);}
+.cube .face.top{
+  background:linear-gradient(135deg, rgba(180,170,255,0.55), rgba(120,140,255,0.25));
+  transform: rotateX(90deg) translateZ(calc(var(--s) / 2));
+  box-shadow:inset 0 0 30px rgba(255,255,255,0.15);
+}
+.cube .face.front{
+  background:linear-gradient(160deg, rgba(140,120,255,0.35), rgba(80,100,220,0.12));
+  transform: translateZ(calc(var(--s) / 2));
+}
+.cube .face.right{
+  background:linear-gradient(160deg, rgba(90,110,255,0.3), rgba(60,70,180,0.08));
+  transform: rotateY(90deg) translateZ(calc(var(--s) / 2));
+}
+@keyframes floatCube{
+  0%,100%{transform: rotateX(-24deg) rotateY(40deg) translateY(0);}
+  50%{transform: rotateX(-24deg) rotateY(40deg) translateY(-16px);}
+}
+.hero-visual::after{
+  content:'';position:absolute;width:60%;height:60%;background:radial-gradient(circle, rgba(120,110,255,0.25), transparent 70%);
+  filter:blur(20px);z-index:-1;
+}
+@media(max-width:960px){
+  .hero-grid{grid-template-columns:1fr;}
+  .hero-visual{height:280px;order:-1;}
+}
+
+/* ============ MARQUEE ============ */
+.trust{padding:40px 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);}
+.trust-label{font-size:11.5px;letter-spacing:0.14em;color:var(--text-dimmer);text-transform:uppercase;margin-bottom:22px;}
+.marquee{overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);}
+.marquee-track{display:flex;gap:80px;width:max-content;animation:scroll 26s linear infinite;}
+.marquee:hover .marquee-track{animation-play-state:paused;}
+.marquee-track span{font-family:'Space Grotesk';font-weight:600;font-size:22px;color:var(--text-dimmer);white-space:nowrap;opacity:0.85;letter-spacing:0.02em;}
+@keyframes scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ============ DASHBOARD SECTION ============ */
+.dash-section{padding:110px 0;}
+.dash-grid{display:grid;grid-template-columns:1.15fr 0.85fr;gap:60px;align-items:center;}
+.dash-mock{
+  background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;
+  box-shadow:0 40px 80px rgba(0,0,0,0.5);
+}
+.dash-topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border-soft);}
+.dash-brand{font-family:'Space Grotesk';font-weight:700;letter-spacing:0.2em;font-size:12px;color:var(--text-dim);}
+.dash-body{display:grid;grid-template-columns:170px 1fr;min-height:420px;}
+.dash-side{border-right:1px solid var(--border-soft);padding:16px 10px;}
+.dash-side-item{
+  display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;font-size:13.5px;
+  color:var(--text-dim);cursor:pointer;margin-bottom:4px;transition:all .15s;
+}
+.dash-side-item i{width:16px;text-align:center;font-size:13px;}
+.dash-side-item:hover{background:rgba(255,255,255,0.04);color:var(--text);}
+.dash-side-item.active{background:var(--gradient);color:#fff;}
+.dash-main{padding:22px;}
+.dash-main h4{font-size:18px;margin-bottom:4px;}
+.dash-sub{color:var(--text-dimmer);font-size:13px;margin-bottom:20px;}
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px;}
+.stat-card{background:var(--surface-2);border:1px solid var(--border-soft);border-radius:10px;padding:14px;}
+.stat-card .lbl{font-size:11px;color:var(--text-dimmer);margin-bottom:6px;}
+.stat-card .val{font-size:22px;font-family:'Space Grotesk';font-weight:600;}
+.stat-card .delta{font-size:11.5px;color:#7be0a8;margin-top:4px;}
+.chart-box{background:var(--surface-2);border:1px solid var(--border-soft);border-radius:10px;padding:16px;}
+.chart-box .chart-title{font-size:13px;color:var(--text-dim);margin-bottom:10px;display:flex;justify-content:space-between;}
+@media(max-width:960px){
+  .dash-grid{grid-template-columns:1fr;gap:40px;}
+  .dash-body{grid-template-columns:110px 1fr;}
+  .stat-row{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:600px){
+  .dash-body{grid-template-columns:1fr;}
+  .dash-side{display:flex;overflow-x:auto;border-right:none;border-bottom:1px solid var(--border-soft);gap:6px;}
+  .dash-side-item{white-space:nowrap;margin-bottom:0;}
+}
+
+.dash-copy .kicker{font-size:12.5px;color:var(--accent1);letter-spacing:0.08em;text-transform:uppercase;font-weight:600;margin-bottom:14px;}
+.dash-copy h2{font-size:clamp(28px,3.4vw,38px);margin-bottom:16px;}
+.dash-copy p{color:var(--text-dim);margin-bottom:24px;max-width:460px;}
+.check-list{list-style:none;margin-bottom:30px;display:flex;flex-direction:column;gap:12px;}
+.check-list li{display:flex;align-items:center;gap:10px;font-size:14.5px;color:var(--text-dim);}
+.check-list i{color:var(--accent1);}
+
+/* ============ FEATURE COLUMNS ============ */
+.features{padding:100px 0;border-top:1px solid var(--border-soft);}
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:50px;}
+.feature-card .kicker{font-size:11.5px;color:var(--accent1);letter-spacing:0.1em;text-transform:uppercase;font-weight:600;margin-bottom:14px;}
+.feature-card h3{font-size:24px;margin-bottom:12px;}
+.feature-card p{color:var(--text-dim);font-size:14.5px;margin-bottom:18px;}
+.feature-card .icon-shape{
+  width:100%;height:140px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;
+  position:relative;
+}
+.shape{
+  width:76px;height:76px;border:1px solid var(--border);position:relative;
+  background:linear-gradient(160deg, rgba(139,123,255,0.15), rgba(79,140,255,0.05));
+  box-shadow:0 0 40px rgba(120,110,255,0.15);
+}
+.shape.layers{border-radius:14px;transform:rotate(45deg);}
+.shape.hex{clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0% 50%);}
+.shape.grid3d{border-radius:50%;}
+.feature-link{font-size:14px;color:var(--accent1);display:inline-flex;align-items:center;gap:6px;font-weight:600;}
+.feature-link i{transition:transform .2s;}
+.feature-link:hover i{transform:translateX(3px);}
+@media(max-width:960px){.feature-grid{grid-template-columns:1fr;gap:60px;}}
+
+/* ============ STATS ============ */
+.stats{padding:70px 0;border-top:1px solid var(--border-soft);background:var(--bg-alt);}
+.stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;text-align:center;}
+.stat-item .num{font-family:'Space Grotesk';font-weight:700;font-size:clamp(28px,3.4vw,42px);}
+.stat-item .lbl{color:var(--text-dimmer);font-size:13px;margin-top:6px;}
+@media(max-width:800px){.stats-grid{grid-template-columns:repeat(2,1fr);row-gap:34px;}}
+
+/* ============ CTA + FOOTER ============ */
+.cta-footer{padding:90px 0 0;}
+.cta-top{
+  display:grid;grid-template-columns:1fr 2fr;gap:60px;padding-bottom:70px;border-bottom:1px solid var(--border-soft);
+}
+.cta-top h2{font-size:clamp(26px,3vw,34px);margin-bottom:14px;}
+.cta-top p{color:var(--text-dim);margin-bottom:22px;max-width:340px;}
+.footer-cols{display:grid;grid-template-columns:repeat(5,1fr);gap:30px;}
+.footer-col h5{font-size:13px;color:var(--text-dimmer);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px;}
+.footer-col a{display:block;font-size:14px;color:var(--text-dim);margin-bottom:11px;transition:color .15s;}
+.footer-col a:hover{color:var(--text);}
+.footer-brand p{color:var(--text-dimmer);font-size:13.5px;margin:14px 0 18px;max-width:230px;}
+.socials{display:flex;gap:10px;}
+.socials a{
+  width:34px;height:34px;border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;
+  color:var(--text-dim);
+}
+.socials a:hover{color:#fff;background:rgba(255,255,255,0.06);}
+@media(max-width:960px){
+  .cta-top{grid-template-columns:1fr;}
+  .footer-cols{grid-template-columns:repeat(2,1fr);}
+}
+.footer-bottom{
+  margin-top:50px;padding:24px 0;border-top:1px solid var(--border-soft);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;
+}
+.footer-bottom-links{display:flex;gap:22px;flex-wrap:wrap;}
+.footer-bottom-links a{font-size:13px;color:var(--text-dimmer);}
+.footer-bottom-links a:hover{color:var(--text);}
+.lang-select{position:relative;}
+.lang-btn{
+  background:none;border:none;color:var(--text-dimmer);font-size:13px;display:flex;align-items:center;gap:6px;cursor:pointer;
+}
+.lang-menu{
+  position:absolute;bottom:calc(100% + 8px);right:0;background:var(--surface-2);border:1px solid var(--border);
+  border-radius:8px;padding:6px;min-width:120px;opacity:0;pointer-events:none;transform:translateY(6px);transition:all .2s;
+}
+.lang-menu.open{opacity:1;pointer-events:auto;transform:translateY(0);}
+.lang-menu button{
+  display:block;width:100%;text-align:left;background:none;border:none;color:var(--text-dim);font-size:13px;
+  padding:8px 10px;border-radius:6px;cursor:pointer;
+}
+.lang-menu button:hover{background:rgba(255,255,255,0.06);color:#fff;}
+.copyright{font-size:13px;color:var(--text-dimmer);}
+
+/* ============ REVEAL ANIM ============ */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ============ MODAL ============ */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(4px);
+  display:flex;align-items:center;justify-content:center;z-index:2000;
+  opacity:0;pointer-events:none;transition:opacity .25s ease;padding:20px;
+}
+.modal-overlay.open{opacity:1;pointer-events:auto;}
+.modal-box{
+  background:var(--surface-2);border:1px solid var(--border);border-radius:16px;padding:34px;
+  width:100%;max-width:420px;transform:scale(0.94) translateY(10px);transition:transform .25s ease;
+  position:relative;
+}
+.modal-overlay.open .modal-box{transform:scale(1) translateY(0);}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--text-dim);font-size:18px;cursor:pointer;}
+.modal-box h3{font-size:22px;margin-bottom:6px;}
+.modal-box p.desc{color:var(--text-dim);font-size:14px;margin-bottom:24px;}
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:13px;color:var(--text-dim);margin-bottom:6px;}
+.field input{
+  width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:11px 12px;
+  color:var(--text);font-family:'Inter';font-size:14px;transition:border-color .2s;
+}
+.field input:focus{outline:none;border-color:var(--accent1);}
+.field.error input{border-color:#ff6b6b;}
+.field .err-msg{color:#ff6b6b;font-size:12px;margin-top:5px;display:none;}
+.field.error .err-msg{display:block;}
+.modal-box .btn{width:100%;justify-content:center;margin-top:8px;}
+.success-msg{
+  display:none;text-align:center;padding:20px 0;
+}
+.success-msg.show{display:block;}
+.success-msg i{font-size:40px;color:#7be0a8;margin-bottom:14px;}
+.form-fields.hide{display:none;}
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <img style="height: 40px; width: 130px;" src="https://i.postimg.cc/yNKVZrbd/logo1-removebg-preview.png" alt="Structured logo" onerror="this.style.display='none';document.getElementById('logofallback').style.display='flex'">
+      <!-- <img src="https://i.postimg.cc/yNKVZrbd/logo1-removebg-preview.png" alt="Structured logo" onerror="this.style.display='none';document.getElementById('logofallback').style.display='flex'"> -->
+      <span id="logofallback" class="logo-fallback" style="display:none">STRUCTURED™</span>
+    </a>
+
+    <nav class="main-nav" id="mainNav">
+      <ul class="nav-list">
+        <li class="has-dropdown" data-dd>
+          <button class="nav-link">Platform <i class="fa-solid fa-chevron-down"></i></button>
+          <div class="dropdown">
+            <a href="#platform">Overview</a>
+            <a href="#platform">Features</a>
+            <a href="#platform">Security</a>
+            <a href="#platform">Integrations</a>
+            <a href="#pricing">Pricing</a>
+          </div>
+        </li>
+        <li class="has-dropdown" data-dd>
+          <button class="nav-link">Solutions <i class="fa-solid fa-chevron-down"></i></button>
+          <div class="dropdown">
+            <a href="#features">Knowledge Management</a>
+            <a href="#features">Risk &amp; Compliance</a>
+            <a href="#features">AI &amp; Data Governance</a>
+            <a href="#features">Digital Transformation</a>
+          </div>
+        </li>
+        <li class="has-dropdown" data-dd>
+          <button class="nav-link">Resources <i class="fa-solid fa-chevron-down"></i></button>
+          <div class="dropdown">
+            <a href="#">Documentation</a>
+            <a href="#">Case Studies</a>
+            <a href="#">Blog</a>
+            <a href="#">Webinars</a>
+            <a href="#">Help Center</a>
+          </div>
+        </li>
+        <li class="has-dropdown" data-dd>
+          <button class="nav-link">Company <i class="fa-solid fa-chevron-down"></i></button>
+          <div class="dropdown">
+            <a href="#">About Us</a>
+            <a href="#">Careers</a>
+            <a href="#">Partners</a>
+            <a href="#">Newsroom</a>
+            <a href="#">Contact</a>
+          </div>
+        </li>
+        <li><a class="nav-link" href="#pricing" style="display:flex">Pricing</a></li>
+      </ul>
+
+      <div class="mobile-actions">
+        <!-- <button class="btn btn-ghost" onclick="openModal('login')">Log in</button>
+        <button class="btn btn-primary" onclick="openModal('demo')">Request a demo <i class="fa-solid fa-arrow-right"></i></button> -->
+      </div>
+    </nav>
+
+    <div class="header-actions">
+      <button class="btn btn-text desktop-only" onclick="openModal('login')">Log in</button>
+      <button class="btn btn-primary desktop-only" onclick="openModal('demo')">Request a demo <i class="fa-solid fa-arrow-right"></i></button>
+      <button class="burger" id="burgerBtn" aria-label="Toggle menu"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </div>
+</header>
+<div class="nav-overlay" id="navOverlay"></div>
+
+<!-- HERO -->
+<section class="hero" id="platform">
+  <div class="wrap hero-grid">
+    <div class="reveal">
+      <div class="eyebrow"><i class="fa-solid fa-cube"></i> Enterprise structure framework</div>
+      <h1>Information has structure.<br>We bring <span class="text-grad">clarity.</span></h1>
+      <p class="sub">Structured™ is the enterprise framework for understanding, evaluating, and applying structure across data, knowledge, and digital systems.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="openModal('demo')">Request a demo <i class="fa-solid fa-arrow-right"></i></button>
+        <button class="btn btn-ghost" onclick="document.getElementById('dashSection').scrollIntoView({behavior:'smooth'})">Explore the platform</button>
+      </div>
+      <div class="hero-points">
+        <div class="hero-point"><span class="ico"><i class="fa-solid fa-cubes"></i></span>Understand<br>Complexity</div>
+        <div class="hero-point"><span class="ico"><i class="fa-solid fa-bullseye"></i></span>Evaluate<br>Impact</div>
+        <div class="hero-point"><span class="ico"><i class="fa-solid fa-layer-group"></i></span>Apply with<br>Confidence</div>
+      </div>
+    </div>
+
+    <div class="hero-visual reveal">
+      <div class="cube-scene" id="cubeScene"></div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section class="trust">
+  <div class="wrap">
+    <div class="trust-label">Trusted by global leaders</div>
+    <div class="marquee">
+      <div class="marquee-track" id="marqueeTrack">
+        <span>AWS</span><span>SIEMENS</span><span>J.P. Morgan</span><span>Verizon</span><span>Deloitte</span><span>Oracle</span><span>NASDAQ</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD -->
+<section class="dash-section" id="dashSection">
+  <div class="wrap dash-grid">
+    <div class="dash-mock reveal">
+      <div class="dash-topbar">
+        <span class="dash-brand">STRUCTURED</span>
+        <div style="display:flex;gap:10px;align-items:center;color:var(--text-dimmer);font-size:13px;">
+          <i class="fa-regular fa-bell"></i>
+          <div style="width:26px;height:26px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;">S</div>
+        </div>
+      </div>
+      <div class="dash-body">
+        <div class="dash-side">
+          <div class="dash-side-item active" data-tab="overview"><i class="fa-solid fa-chart-simple"></i>Overview</div>
+          <div class="dash-side-item" data-tab="framework"><i class="fa-solid fa-diagram-project"></i>Framework</div>
+          <div class="dash-side-item" data-tab="evaluations"><i class="fa-solid fa-square-check"></i>Evaluations</div>
+          <div class="dash-side-item" data-tab="insights"><i class="fa-solid fa-lightbulb"></i>Insights</div>
+          <div class="dash-side-item" data-tab="resources"><i class="fa-solid fa-folder"></i>Resources</div>
+          <div class="dash-side-item" data-tab="settings"><i class="fa-solid fa-gear"></i>Settings</div>
+        </div>
+        <div class="dash-main">
+          <h4 id="tabTitle">Overview</h4>
+          <p class="dash-sub" id="tabSub">Welcome back. Here's what's happening.</p>
+          <div class="stat-row" id="statRow">
+            <div class="stat-card"><div class="lbl">Evaluations</div><div class="val">128</div><div class="delta">+12% vs last 30 days</div></div>
+            <div class="stat-card"><div class="lbl">Framework Score</div><div class="val">86/100</div><div class="delta">+6 vs last 30 days</div></div>
+            <div class="stat-card"><div class="lbl">Entities Analyzed</div><div class="val">532</div><div class="delta">+18% vs last 30 days</div></div>
+            <div class="stat-card"><div class="lbl">Integrity Index</div><div class="val">92/100</div><div class="delta">+7 vs last 30 days</div></div>
+          </div>
+          <div class="chart-box">
+            <div class="chart-title"><span>Framework Score Over Time</span><span style="color:var(--accent1);cursor:pointer;">Last 30 days</span></div>
+            <svg viewBox="0 0 400 120" width="100%" height="120" preserveAspectRatio="none">
+              <polyline id="chartLine" fill="none" stroke="url(#grad)" stroke-width="2.5"
+                points="0,80 40,70 80,85 120,55 160,60 200,40 240,50 280,25 320,35 360,20 400,28"
+                stroke-dasharray="1000" stroke-dashoffset="1000"/>
+              <defs>
+                <linearGradient id="grad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#8b7bff"/>
+                  <stop offset="100%" stop-color="#4f8cff"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-copy reveal">
+      <div class="kicker">The Structured Platform</div>
+      <h2>Built for clarity.<br>Designed for scale.</h2>
+      <p>Our platform helps global teams make sense of complexity, improve decision quality, and move faster with confidence — without sacrificing rigor.</p>
+      <ul class="check-list">
+        <li><i class="fa-solid fa-circle-check"></i> Enterprise-grade security and governance</li>
+        <li><i class="fa-solid fa-circle-check"></i> Flexible architecture for any environment</li>
+        <li><i class="fa-solid fa-circle-check"></i> Scales with your data, your team, your ambition</li>
+      </ul>
+      <button class="btn btn-primary" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Explore the platform <i class="fa-solid fa-arrow-right"></i></button>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="wrap feature-grid">
+    <div class="feature-card reveal">
+      <div class="kicker">Unify Information</div>
+      <div class="icon-shape"><div><img style="width: 200px; height: 120px;" src="https://media.licdn.com/dms/image/v2/D5612AQFKQhl4CaggZg/article-cover_image-shrink_600_2000/B56ZhnyR8QHkAQ-/0/1754087894761?e=2147483647&amp;v=beta&amp;t=1LFhaIzyAgQI8hM1EQFi7PQ3yJPGym6SBfLtouTBqxs"></div></div>
+      <h3>Bring structure to every source.</h3>
+      <p>Connect disparate systems, standardize content, and create a single source of trusted truth across your enterprise.</p>
+      <a href="#" class="feature-link">Learn more <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+    <div class="feature-card reveal">
+      <div class="kicker">Evaluate with Confidence</div>
+      <div class="icon-shape"><div> <img style="width: 200px; height: 120px;" src="https://globalfundcommunityfoundations.org/wp-content/uploads/2023/05/MeasuringWhatsMattersBanner.png"></div></div>
+      <h3>Measure what matters.</h3>
+      <p>Evaluate quality, integrity, and impact with consistent frameworks and scoring built for enterprise scale.</p>
+      <a href="#" class="feature-link">Learn more <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+    <div class="feature-card reveal">
+      <div class="kicker">Drive Better Outcomes</div>
+      <div class="icon-shape"><div> <img style="width: 200px; height: 120px;" src="https://www.shutterstock.com/image-photo/interactive-global-financial-analytics-realtime-260nw-2586360071.jpg"></div></div>
+      <h3>Apply insights at scale.</h3>
+      <p>Operationalize understanding across workflows, products, and decision-making — everywhere, every time.</p>
+      <a href="#" class="feature-link">Learn more <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats" id="pricing">
+  <div class="wrap stats-grid">
+    <div class="stat-item reveal"><div class="num" data-target="128" data-suffix="M+">0</div><div class="lbl">Entities analyzed</div></div>
+    <div class="stat-item reveal"><div class="num" data-target="24" data-suffix="+">0</div><div class="lbl">Industries</div></div>
+    <div class="stat-item reveal"><div class="num" data-target="50" data-suffix="+">0</div><div class="lbl">Countries</div></div>
+    <div class="stat-item reveal"><div class="num" data-target="99.99" data-suffix="%">0</div><div class="lbl">Platform uptime</div></div>
+    <div class="stat-item reveal"><div class="num">∞</div><div class="lbl">Possibilities</div></div>
+  </div>
+</section>
+
+<!-- CTA + FOOTER -->
+<footer class="cta-footer">
+  <div class="wrap">
+    <div class="cta-top">
+      <div class="reveal">
+        <h2>Ready to bring clarity to your enterprise?</h2>
+        <p>See how Structured can help you turn complexity into confidence.</p>
+        <button class="btn btn-primary" onclick="openModal('demo')">Request a demo <i class="fa-solid fa-arrow-right"></i></button>
+      </div>
+      <div class="footer-cols reveal">
+        <div class="footer-col">
+          <h5>Platform</h5>
+          <a href="#platform">Overview</a>
+          <a href="#features">Features</a>
+          <a href="#">Security</a>
+          <a href="#">Integrations</a>
+          <a href="#pricing">Pricing</a>
+        </div>
+        <div class="footer-col">
+          <h5>Solutions</h5>
+          <a href="#">Knowledge Management</a>
+          <a href="#">Risk &amp; Compliance</a>
+          <a href="#">AI &amp; Data Governance</a>
+          <a href="#">Digital Transformation</a>
+        </div>
+        <div class="footer-col">
+          <h5>Resources</h5>
+          <a href="#">Documentation</a>
+          <a href="#">Case Studies</a>
+          <a href="#">Blog</a>
+          <a href="#">Webinars</a>
+          <a href="#">Help Center</a>
+        </div>
+        <div class="footer-col">
+          <h5>Company</h5>
+          <a href="#">About Us</a>
+          <a href="#">Careers</a>
+          <a href="#">Partners</a>
+          <a href="#">Newsroom</a>
+          <a href="#">Contact</a>
+        </div>
+        <div class="footer-col footer-brand">
+          <h5 style="margin-bottom:8px;">Structured™</h5>
+          <p>A modern platform for understanding, evaluating, and applying structure across the enterprise.</p>
+          <div class="socials">
+            <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#"><i class="fa-brands fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="copyright">© <span id="year"></span> Structured™. All rights reserved.Developed by Zannatul.</div>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Trust Center</a>
+      </div>
+      <div class="lang-select">
+        <button class="lang-btn" id="langBtn"><i class="fa-solid fa-globe"></i> English <i class="fa-solid fa-chevron-down" style="font-size:10px"></i></button>
+        <div class="lang-menu" id="langMenu">
+          <button onclick="setLang('English')">English</button>
+          <button onclick="setLang('Deutsch')">Deutsch</button>
+          <button onclick="setLang('日本語')">日本語</button>
+          <button onclick="setLang('Français')">Français</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+    <div id="modalContent">
+      <h3 id="modalTitle">Request a demo</h3>
+      <p class="desc" id="modalDesc">Tell us a bit about your team and we'll be in touch shortly.</p>
+      <form id="modalForm" class="form-fields" onsubmit="return handleSubmit(event)">
+        <div class="field" id="f-name">
+          <label>Full name</label>
+          <input type="text" name="name" placeholder="Jane Doe">
+          <div class="err-msg">Please enter your name.</div>
+        </div>
+        <div class="field" id="f-email">
+          <label id="emailLabel">Work email</label>
+          <input type="email" name="email" placeholder="jane@company.com">
+          <div class="err-msg">Please enter a valid email address.</div>
+        </div>
+        <div class="field" id="f-company">
+          <label>Company</label>
+          <input type="text" name="company" placeholder="Company Inc.">
+          <div class="err-msg">Please enter a company name.</div>
+        </div>
+        <button class="btn btn-primary" type="submit" id="submitBtn">Request a demo <i class="fa-solid fa-arrow-right"></i></button>
+      </form>
+      <div class="success-msg" id="successMsg">
+        <i class="fa-solid fa-circle-check"></i>
+        <h3 id="successTitle">You're all set!</h3>
+        <p class="desc" style="margin-bottom:0;">Our team will reach out within one business day.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ---------- Dropdown nav ---------- */
+const ddItems = document.querySelectorAll('[data-dd]');
+ddItems.forEach(item=>{
+  const btn = item.querySelector('.nav-link');
+  btn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    const isOpen = item.classList.contains('open');
+    ddItems.forEach(i=>i.classList.remove('open'));
+    if(!isOpen) item.classList.add('open');
+  });
+});
+document.addEventListener('click', ()=> ddItems.forEach(i=>i.classList.remove('open')));
+document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ ddItems.forEach(i=>i.classList.remove('open')); closeModal(); }});
+
+/* ---------- Mobile nav ---------- */
+const burgerBtn = document.getElementById('burgerBtn');
+const mainNav = document.getElementById('mainNav');
+const navOverlay = document.getElementById('navOverlay');
+function toggleMobileNav(force){
+  const open = force !== undefined ? force : !mainNav.classList.contains('open');
+  mainNav.classList.toggle('open', open);
+  navOverlay.classList.toggle('open', open);
+  burgerBtn.innerHTML = open ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+burgerBtn.addEventListener('click', ()=> toggleMobileNav());
+navOverlay.addEventListener('click', ()=> toggleMobileNav(false));
+
+/* ---------- Cube scene generation ---------- */
+const scene = document.getElementById('cubeScene');
+const cubeCount = window.innerWidth < 700 ? 7 : 13;
+for(let i=0;i<cubeCount;i++){
+  const size = 40 + Math.random()*80;
+  const x = Math.random()*70;
+  const y = Math.random()*70;
+  const delay = Math.random()*4;
+  const dur = 5 + Math.random()*3;
+  const cube = document.createElement('div');
+  cube.className = 'cube';
+  cube.style.setProperty('--s', size+'px');
+  cube.style.left = x+'%';
+  cube.style.top = y+'%';
+  cube.style.width = size+'px';
+  cube.style.height = size+'px';
+  cube.style.animationDelay = delay+'s';
+  cube.style.animationDuration = dur+'s';
+  cube.innerHTML = '<div class="face top"></div><div class="face front"></div><div class="face right"></div>';
+  scene.appendChild(cube);
+}
+
+/* ---------- Reveal on scroll ---------- */
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); }
+  });
+},{threshold:0.15});
+revealEls.forEach(el=>io.observe(el));
+
+/* ---------- Counter animation ---------- */
+const counters = document.querySelectorAll('.num[data-target]');
+const counterIO = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      animateCounter(entry.target);
+      counterIO.unobserve(entry.target);
+    }
+  });
+},{threshold:0.4});
+counters.forEach(c=>counterIO.observe(c));
+
+function animateCounter(el){
+  const target = parseFloat(el.dataset.target);
+  const suffix = el.dataset.suffix || '';
+  const isDecimal = target % 1 !== 0;
+  const duration = 1600;
+  const start = performance.now();
+  function tick(now){
+    const progress = Math.min((now-start)/duration, 1);
+    const eased = 1 - Math.pow(1-progress, 3);
+    const val = target * eased;
+    el.textContent = (isDecimal ? val.toFixed(2) : Math.round(val)) + suffix;
+    if(progress < 1) requestAnimationFrame(tick);
+    else el.textContent = (isDecimal ? target.toFixed(2) : target) + suffix;
+  }
+  requestAnimationFrame(tick);
+}
+
+/* ---------- Chart draw animation ---------- */
+const chartLine = document.getElementById('chartLine');
+const chartIO = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      chartLine.style.transition = 'stroke-dashoffset 1.6s ease';
+      chartLine.style.strokeDashoffset = '0';
+      chartIO.unobserve(e.target);
+    }
+  });
+},{threshold:0.3});
+chartIO.observe(document.querySelector('.chart-box'));
+
+/* ---------- Dashboard tabs ---------- */
+const tabData = {
+  overview:{title:'Overview', sub:"Welcome back. Here's what's happening.",
+    stats:[['Evaluations','128','+12% vs last 30 days'],['Framework Score','86/100','+6 vs last 30 days'],['Entities Analyzed','532','+18% vs last 30 days'],['Integrity Index','92/100','+7 vs last 30 days']]},
+  framework:{title:'Framework', sub:'Your structural evaluation framework at a glance.',
+    stats:[['Active Models','14','+2 this month'],['Coverage','94%','+3% vs last month'],['Consistency','89/100','+4 vs last month'],['Revisions','37','+9 this month']]},
+  evaluations:{title:'Evaluations', sub:'Recent evaluations across your connected sources.',
+    stats:[['Completed','342','+22% vs last 30 days'],['In Progress','58','—'],['Flagged','12','-3 vs last 30 days'],['Avg. Score','88/100','+2 vs last 30 days']]},
+  insights:{title:'Insights', sub:'Semantic clarity and structural consistency trends.',
+    stats:[['New Insights','19','+5 this week'],['Applied','63','+11 this week'],['Confidence','91%','+2% this week'],['Sources','24','+3 this week']]},
+  resources:{title:'Resources', sub:'Guides, docs, and templates for your team.',
+    stats:[['Guides','48','—'],['Templates','21','+2 this month'],['Downloads','1.2K','+180 this month'],['Bookmarks','76','+9 this month']]},
+  settings:{title:'Settings', sub:'Manage your workspace, roles, and integrations.',
+    stats:[['Team Members','32','+4 this month'],['Roles','6','—'],['Integrations','9','+1 this month'],['API Keys','5','—']]}
+};
+const sideItems = document.querySelectorAll('.dash-side-item');
+sideItems.forEach(item=>{
+  item.addEventListener('click', ()=>{
+    sideItems.forEach(i=>i.classList.remove('active'));
+    item.classList.add('active');
+    const tab = tabData[item.dataset.tab];
+    document.getElementById('tabTitle').textContent = tab.title;
+    document.getElementById('tabSub').textContent = tab.sub;
+    const statRow = document.getElementById('statRow');
+    statRow.innerHTML = tab.stats.map(s=>`
+      <div class="stat-card"><div class="lbl">${s[0]}</div><div class="val">${s[1]}</div><div class="delta">${s[2]}</div></div>
+    `).join('');
+  });
+});
+
+/* ---------- Language selector ---------- */
+const langBtn = document.getElementById('langBtn');
+const langMenu = document.getElementById('langMenu');
+langBtn.addEventListener('click',(e)=>{ e.stopPropagation(); langMenu.classList.toggle('open'); });
+document.addEventListener('click', ()=> langMenu.classList.remove('open'));
+function setLang(lang){
+  langBtn.innerHTML = `<i class="fa-solid fa-globe"></i> ${lang} <i class="fa-solid fa-chevron-down" style="font-size:10px"></i>`;
+  langMenu.classList.remove('open');
+}
+
+/* ---------- Modal ---------- */
+const modalOverlay = document.getElementById('modalOverlay');
+const modalTitle = document.getElementById('modalTitle');
+const modalDesc = document.getElementById('modalDesc');
+const modalForm = document.getElementById('modalForm');
+const successMsg = document.getElementById('successMsg');
+const submitBtn = document.getElementById('submitBtn');
+const emailLabel = document.getElementById('emailLabel');
+const nameField = document.getElementById('f-name');
+
+function openModal(type){
+  modalOverlay.classList.add('open');
+  modalForm.classList.remove('hide');
+  successMsg.classList.remove('show');
+  modalForm.reset();
+  document.querySelectorAll('.field').forEach(f=>f.classList.remove('error'));
+  if(type === 'demo'){
+    modalTitle.textContent = 'Request a demo';
+    modalDesc.textContent = "Tell us a bit about your team and we'll be in touch shortly.";
+    emailLabel.textContent = 'Work email';
+    submitBtn.innerHTML = 'Request a demo <i class="fa-solid fa-arrow-right"></i>';
+    nameField.style.display = 'block';
+    document.getElementById('f-company').style.display = 'block';
+  } else {
+    modalTitle.textContent = 'Log in to Structured';
+    modalDesc.textContent = 'Welcome back. Enter your credentials to continue.';
+    emailLabel.textContent = 'Email address';
+    submitBtn.innerHTML = 'Log in <i class="fa-solid fa-arrow-right"></i>';
+    nameField.style.display = 'none';
+    document.getElementById('f-company').style.display = 'none';
+  }
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(){
+  modalOverlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+modalOverlay.addEventListener('click', (e)=>{ if(e.target === modalOverlay) closeModal(); });
+
+function handleSubmit(e){
+  e.preventDefault();
+  let valid = true;
+  const fields = modalForm.querySelectorAll('.field');
+  fields.forEach(f=>{
+    if(f.style.display === 'none') return;
+    const input = f.querySelector('input');
+    let ok = input.value.trim().length > 1;
+    if(input.type === 'email'){ ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim()); }
+    f.classList.toggle('error', !ok);
+    if(!ok) valid = false;
+  });
+  if(!valid) return false;
+  modalForm.classList.add('hide');
+  successMsg.classList.add('show');
+  document.getElementById('successTitle').textContent = modalTitle.textContent.includes('Log in') ? 'Welcome back!' : "You're all set!";
+  setTimeout(()=>{ closeModal(); }, 2200);
+  return false;
+}
+</script>
+</body>
+</html>
